@@ -30,6 +30,7 @@ It is intentionally kept **simple, extensible, and explainable**, reflecting rea
 
 ## 🔹 Framework Architecture
 
+```text
 ai_sdet/
 │
 ├── core/                # Browser & framework core logic
@@ -55,7 +56,6 @@ ai_sdet/
 │
 ├── pytest.ini           # PyTest configuration
 └── README.md
-
 
 
 ## 🔹 Key Design Decisions
