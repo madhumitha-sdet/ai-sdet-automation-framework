@@ -23,7 +23,8 @@ It is intentionally kept **simple, extensible, and explainable**, reflecting rea
 * **Design Pattern**: Page Object Model (POM)
 * **Wait Strategy**: Explicit waits (WebDriverWait)
 * **Logging**: Python logging module
-* **Failure Diagnostics**: Screenshots on test failure
+* **Failure Diagnostics**: Screenshots on failure (embedded in HTML report)
+* **Reporting**: pytest-html (self-contained HTML reports)
 * **AI Integration (Advisory)**: LLM-assisted locator analysis (human-in-the-loop, non-auto-healing)
 
 ---
@@ -97,6 +98,23 @@ ai_sdet/
 * Timestamped execution logs
 * Automatic screenshot capture on test failure
 * Designed for CI/CD troubleshooting
+
+---
+
+## 🔹 Test Reporting
+
+The framework uses **pytest-html** to generate **self-contained HTML reports** after every test run.
+
+### Reporting features:
+- Pass / fail summary
+- Environment details
+- Test execution duration
+- Embedded screenshots for failed tests
+- Embedded logs and failure context
+
+Screenshots are **embedded using base64 encoding**, ensuring reports remain portable and work reliably when shared or downloaded from CI artifacts.
+
+Reports are generated automatically at:
 
 ---
 
@@ -190,13 +208,17 @@ python -m pytest -v -m regression
 
 ## 🔹 CI/CD Readiness
 
-The framework is designed to integrate easily with:
+The framework includes **working CI integration** using GitHub Actions.
 
-* GitHub Actions
-* Azure DevOps
-* Jenkins
+### CI capabilities:
+- Automated test execution on push
+- Headless browser execution
+- HTML report generation
+- Failure diagnostics (logs + screenshots)
 
-Headless execution, reporting, and selective test execution are supported by design.
+CI pipelines can be extended to:
+- Upload HTML reports as build artifacts
+- Integrate with Azure DevOps or Jenkins
 
 ---
 
