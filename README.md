@@ -56,7 +56,7 @@ ai_sdet/
 │
 ├── pytest.ini           # PyTest configuration
 └── README.md
-
+```
 
 ## 🔹 Key Design Decisions
 
