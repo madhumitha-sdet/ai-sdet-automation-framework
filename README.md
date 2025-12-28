@@ -19,17 +19,17 @@ It is intentionally kept **simple, extensible, and explainable**, reflecting rea
 
 * **Language**: Python
 * **Automation**: Selenium WebDriver
-* **Test Framework**: PyTest
+* **Test Framework**: PyTest (fixtures, markers)
 * **Design Pattern**: Page Object Model (POM)
+* **Wait Strategy**: Explicit waits (WebDriverWait)
 * **Logging**: Python logging module
-* **Reporting Support**: Screenshots on failure
-* **AI Integration (Conceptual)**: Locator suggestion (non-auto-healing)
+* **Failure Diagnostics**: Screenshots on test failure
+* **AI Integration (Advisory)**: LLM-assisted locator analysis (human-in-the-loop, non-auto-healing)
 
 ---
 
 ## 🔹 Framework Architecture
 
-```
 ai_sdet/
 │
 ├── core/                # Browser & framework core logic
@@ -46,17 +46,17 @@ ai_sdet/
 ├── utils/               # Utilities (logging, helpers)
 │   └── logger.py
 │
-├── ai_utils/            # AI-assisted utilities (safe usage)
-│   └── locator_suggester.py
+├── ai_utils/            # AI-assisted utilities (human-in-the-loop)
+│   ├── locator_suggester.py      # Design stub for AI integration
+│   └── ai_locator_analyzer.py    # Manual LLM-based locator analysis tool
 │
 ├── logs/                # Logs & screenshots
 │   └── screenshots/
 │
 ├── pytest.ini           # PyTest configuration
 └── README.md
-```
 
----
+
 
 ## 🔹 Key Design Decisions
 
@@ -127,6 +127,29 @@ Instead, it follows an **enterprise-safe AI approach**:
 
 This model is suitable for **healthcare, finance, and enterprise environments**.
 
+### 🔸 AI Integration Design (Human-in-the-Loop)
+
+This framework follows a **human-in-the-loop AI design**, intentionally separating
+test execution from AI-based analysis.
+
+- **`locator_suggester.py`**
+  - Acts as a **design stub** defining where AI-assisted logic integrates.
+  - Used to demonstrate framework readiness for AI without affecting runtime behavior.
+
+- **`ai_locator_analyzer.py`**
+  - A **manual, post-failure analysis tool** that demonstrates real LLM integration.
+  - Consumes failure context such as DOM snapshots and failed locators.
+  - Uses an external LLM to suggest alternative, more stable locators.
+  - Designed to be executed **outside test runtime** to preserve determinism and security.
+
+This approach ensures:
+- Predictable test execution
+- No silent auto-healing
+- Clear audit trail
+- Compliance with enterprise and regulated environments
+
+AI is used as an **advisory system**, not as an autonomous decision-maker.
+
 ---
 
 ## 🔹 Sample Test Scenarios
@@ -141,19 +164,27 @@ This model is suitable for **healthcare, finance, and enterprise environments**.
 
 ### Activate virtual environment
 
+```bash
 source venv/bin/activate
+```
 
 ### Run all tests
 
+```bash
 python -m pytest -v
+```
 
 ### Run smoke tests
 
+```bash
 python -m pytest -v -m smoke
+```
 
 ### Run regression tests
 
+```bash
 python -m pytest -v -m regression
+```
 
 ---
 
