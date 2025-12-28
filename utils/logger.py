@@ -24,4 +24,10 @@ def get_logger(name):
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
 
+        # Console handler (for CI visibility)
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
+
+
     return logger
