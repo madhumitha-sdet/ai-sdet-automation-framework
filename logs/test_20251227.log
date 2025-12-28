@@ -1,0 +1,16 @@
+2025-12-27 11:34:53,576 - INFO - test_basic - Starting valid login test
+2025-12-27 11:34:54,534 - INFO - test_basic - Valid login successful
+2025-12-27 11:34:55,059 - INFO - test_basic - Negative test validation with invalid credentials
+2025-12-27 11:34:56,053 - INFO - test_basic - Error message validation successful
+2025-12-27 11:36:37,159 - INFO - test_basic - Starting valid login test
+2025-12-27 11:36:38,105 - INFO - test_basic - Valid login successful
+2025-12-27 11:36:39,255 - INFO - test_basic - Negative test validation with invalid credentials
+2025-12-27 11:36:40,184 - INFO - test_basic - Error message validation successful
+2025-12-27 12:12:07,566 - INFO - test_basic - Starting valid login test
+2025-12-27 12:12:08,641 - INFO - test_basic - Valid login successful
+2025-12-27 12:12:09,148 - INFO - test_basic - Negative test validation with invalid credentials
+2025-12-27 12:12:10,045 - INFO - test_basic - Error message validation successful
+2025-12-27 12:13:32,152 - INFO - test_basic - Starting valid login test
+2025-12-27 12:13:33,274 - INFO - test_basic - Valid login successful
+2025-12-27 12:14:29,467 - INFO - test_basic - Negative test validation with invalid credentials
+2025-12-27 12:14:30,386 - INFO - test_basic - Error message validation successful
