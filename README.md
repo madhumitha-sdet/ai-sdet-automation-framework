@@ -51,6 +51,7 @@ ai_sdet/
 ├── ai_utils/            # AI-assisted failure intelligence (post-run)
 │   ├── ai_failure_analyzer.py
 │   └── remediation_advisor.py
+|   └── flaky_test_tracker.py
 │
 ├── logs/                # Execution logs & screenshots
 │   └── screenshots/
@@ -180,6 +181,11 @@ python -m pytest -v -m smoke
 python -m pytest -v -m regression
 ```
 
+### To run the analyser
+
+```bash
+python -m ai_utils.ai_failure_analyzer
+```
 ---
 
 ## CI/CD Readiness
@@ -223,6 +229,16 @@ This strategy scales effectively to large test suites (1000+ tests).
 * Mirrors real enterprise constraints
 
 ---
+
+## How This Framework Scales
+
+- Designed to support large test suites (1000+ tests)
+- Flaky tests are detected and isolated instead of retried
+- Failure analysis focuses only on stable failures
+- Page Object Model minimizes impact of UI changes
+- CI pipelines remain deterministic and noise-free
+
+This approach prevents false alarms and improves developer confidence in automation results.
 
 ## Author Notes
 
