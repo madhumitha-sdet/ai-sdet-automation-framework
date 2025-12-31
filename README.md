@@ -1,6 +1,6 @@
-# 📘 README.md — AI-Assisted Test Automation Framework
+# README.md — AI-Assisted Test Automation Framework
 
-## 🔹 Overview
+## Overview
 
 This repository contains a **production-grade Selenium + PyTest automation framework**, designed with **enterprise testing standards** in mind.
 
@@ -9,13 +9,13 @@ The framework emphasizes:
 * Clean architecture
 * Stability over over-engineering
 * CI/CD readiness
-* AI-assisted testing (human-controlled, secure approach)
+* AI-assisted testing using a **human-in-the-loop** model
 
 It is intentionally kept **simple, extensible, and explainable**, reflecting real-world automation practices used in regulated domains such as **Healthcare, Banking, and Enterprise SaaS**.
 
 ---
 
-## 🔹 Tech Stack
+## Tech Stack
 
 * **Language**: Python
 * **Automation**: Selenium WebDriver
@@ -23,13 +23,13 @@ It is intentionally kept **simple, extensible, and explainable**, reflecting rea
 * **Design Pattern**: Page Object Model (POM)
 * **Wait Strategy**: Explicit waits (WebDriverWait)
 * **Logging**: Python logging module
-* **Failure Diagnostics**: Screenshots on failure (embedded in HTML report)
-* **Reporting**: pytest-html (self-contained HTML reports)
-* **AI Integration (Advisory)**: LLM-assisted locator analysis (human-in-the-loop, non-auto-healing)
+* **Failure Diagnostics**: Screenshots on test failure
+* **Reporting**: pytest-html + JUnit XML
+* **AI Integration (Advisory)**: Post-run failure analysis & remediation guidance
 
 ---
 
-## 🔹 Framework Architecture
+## Framework Architecture
 
 ```text
 ai_sdet/
@@ -48,129 +48,105 @@ ai_sdet/
 ├── utils/               # Utilities (logging, helpers)
 │   └── logger.py
 │
-├── ai_utils/            # AI-assisted utilities (human-in-the-loop)
-│   ├── locator_suggester.py      # Design stub for AI integration
-│   └── ai_locator_analyzer.py    # Manual LLM-based locator analysis tool
+├── ai_utils/            # AI-assisted failure intelligence (post-run)
+│   ├── ai_failure_analyzer.py
+│   └── remediation_advisor.py
 │
-├── logs/                # Logs & screenshots
+├── logs/                # Execution logs & screenshots
 │   └── screenshots/
+│
+├── reports/             # Test reports
+│   ├── report.html
+│   └── results.xml
 │
 ├── pytest.ini           # PyTest configuration
 └── README.md
 ```
 
-## 🔹 Key Design Decisions
+---
 
-### ✅ Centralized Browser Management
+## Key Design Decisions
 
-* All browser creation is handled in a single place (`BrowserManager`)
-* Ensures consistent configuration
-* CI/CD friendly (headless support ready)
+### Centralized Browser Management
+
+* Browser creation handled via `BrowserManager`
+* Consistent configuration across local & CI
+* Headless-ready for pipelines
 
 ---
 
-### ✅ Fixture-Driven Lifecycle
+### Fixture-Driven Lifecycle
 
-* Browser setup and teardown handled via PyTest fixtures
-* Tests remain clean and focused on behavior
+* Setup & teardown via PyTest fixtures
 * Prevents resource leakage
+* Clean, readable tests
 
 ---
 
-### ✅ Page Object Model (POM)
+### Page Object Model (POM)
 
-* UI locators and actions isolated from test logic
-* Tests read like business flows
-* UI changes impact only page classes
-
----
-
-### ✅ Explicit Wait Strategy
-
-* No implicit waits
-* All interactions go through controlled explicit waits
-* Reduces flaky tests significantly
+* UI locators isolated from test logic
+* Easier maintenance during UI changes
+* Business-flow-oriented tests
 
 ---
 
-### ✅ Logging & Failure Diagnostics
+### Logging & Failure Diagnostics
 
 * Timestamped execution logs
-* Automatic screenshot capture on test failure
-* Designed for CI/CD troubleshooting
+* Automatic screenshots on failures
+* CI-friendly debugging artifacts
 
 ---
 
-## 🔹 Test Reporting
+### Reporting
 
-The framework uses **pytest-html** to generate **self-contained HTML reports** after every test run.
-
-### Reporting features:
-- Pass / fail summary
-- Environment details
-- Test execution duration
-- Embedded screenshots for failed tests
-- Embedded logs and failure context
-
-Screenshots are **embedded using base64 encoding**, ensuring reports remain portable and work reliably when shared or downloaded from CI artifacts.
-
-Reports are generated automatically at:
+* **pytest-html** for human-readable execution reports
+* **JUnit XML** for CI and post-run analysis
+* Supports trend analysis & failure aggregation
 
 ---
 
-### ✅ Test Categorization
+### Test Categorization
 
-* Smoke and regression tests tagged using PyTest markers
+* Smoke & regression tests via PyTest markers
 * Enables selective execution in pipelines
 
 ---
 
-## 🔹 AI-Assisted Testing (Safe & Practical Approach)
+## AI-Assisted Failure Intelligence (Enterprise-Safe)
 
-This framework **does not auto-heal locators**.
+This framework **does not use auto-healing or runtime AI**.
 
-Instead, it follows an **enterprise-safe AI approach**:
+Instead, it follows a **post-execution, human-in-the-loop AI model**, commonly adopted in regulated environments.
 
-* When a locator fails:
+### How it works:
 
-  * DOM can be analyzed
-  * AI suggests alternative locators
-  * Engineer reviews & applies changes manually
+1. Test suite executes normally
+2. JUnit XML report is generated
+3. `ai_failure_analyzer.py`:
+
+   * Parses test failures
+   * Groups failures by root cause (locator, timing, assertion, environment)
+4. `remediation_advisor.py`:
+
+   * Provides **actionable remediation guidance**
+   * Keeps fixes deterministic and auditable
 
 ### Why this approach?
 
-* Avoids unpredictable test behavior
-* Meets security & audit requirements
-* Keeps humans in control of test logic
+* Avoids flaky CI behavior
+* Preserves audit trails
+* Keeps engineers in control
+* Scales cleanly to large test suites
 
-This model is suitable for **healthcare, finance, and enterprise environments**.
+> AI is used as an **advisory system**, not as an autonomous decision-maker.
 
-### 🔸 AI Integration Design (Human-in-the-Loop)
-
-This framework follows a **human-in-the-loop AI design**, intentionally separating
-test execution from AI-based analysis.
-
-- **`locator_suggester.py`**
-  - Acts as a **design stub** defining where AI-assisted logic integrates.
-  - Used to demonstrate framework readiness for AI without affecting runtime behavior.
-
-- **`ai_locator_analyzer.py`**
-  - A **manual, post-failure analysis tool** that demonstrates real LLM integration.
-  - Consumes failure context such as DOM snapshots and failed locators.
-  - Uses an external LLM to suggest alternative, more stable locators.
-  - Designed to be executed **outside test runtime** to preserve determinism and security.
-
-This approach ensures:
-- Predictable test execution
-- No silent auto-healing
-- Clear audit trail
-- Compliance with enterprise and regulated environments
-
-AI is used as an **advisory system**, not as an autonomous decision-maker.
+This design is suitable for **healthcare, finance, and enterprise platforms**.
 
 ---
 
-## 🔹 Sample Test Scenarios
+## Sample Test Scenarios
 
 * Valid login (happy path)
 * Invalid login with error validation
@@ -178,7 +154,7 @@ AI is used as an **advisory system**, not as an autonomous decision-maker.
 
 ---
 
-## 🔹 How to Run Tests
+## How to Run Tests
 
 ### Activate virtual environment
 
@@ -206,32 +182,34 @@ python -m pytest -v -m regression
 
 ---
 
-## 🔹 CI/CD Readiness
+## CI/CD Readiness
 
-The framework includes **working CI integration** using GitHub Actions.
+The framework integrates with:
 
-### CI capabilities:
-- Automated test execution on push
-- Headless browser execution
-- HTML report generation
-- Failure diagnostics (logs + screenshots)
+* GitHub Actions
+* Azure DevOps
+* Jenkins
 
-CI pipelines can be extended to:
-- Upload HTML reports as build artifacts
-- Integrate with Azure DevOps or Jenkins
+Features:
+
+* Headless execution
+* Test reports as pipeline artifacts
+* Deterministic failure analysis
 
 ---
 
-## 🔹 Why This Framework Reflects Senior-Level Automation
+## Why This Reflects Senior-Level Automation
 
-* Focuses on **clarity over complexity**
-* Designed for **maintainability**
+* Prioritizes **maintainability**
 * Avoids over-engineering
-* Emphasizes **real-world constraints**
-* Balances automation with AI responsibly
+* Designed for **scale & auditability**
+* Uses AI **responsibly**, not blindly
+* Mirrors real enterprise constraints
 
 ---
 
-## 🔹 Author Notes
+## Author Notes
 
-This framework reflects how **automation is actually built and maintained** in long-running enterprise projects — not demo or tutorial code.
+This framework reflects how **long-running enterprise automation systems** are built and evolved — not demo or tutorial code.
+
+---

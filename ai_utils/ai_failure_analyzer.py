@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from collections import defaultdict
 from remediation_advisor import suggest_remediation
+import os
 
 
 
@@ -75,6 +76,9 @@ def print_summary(classified_failures):
                 f" - {item['test_name']} "
                 f"({item['error_type']}): {item['message']}"
             )
+
+def is_ai_enabled():
+    return os.getenv("ENABLE_AI", "false").lower() == "true"
 
 
 def main():
