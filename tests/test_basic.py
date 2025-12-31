@@ -12,7 +12,7 @@ def test_valid_login(driver):
     login_page.login("standard_user", "secret_sauce")
 
     logger.info("Valid login successful")
-    assert "inventoory" in driver.current_url
+    assert "inventory" in driver.current_url
 
 @pytest.mark.regression
 def test_invalid_login_shows_error(driver):

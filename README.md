@@ -198,6 +198,22 @@ Features:
 
 ---
 
+## Flaky Test Detection Strategy
+
+This framework detects flaky tests using **historical execution patterns**, not retries.
+
+### How it works
+- Test results are stored across runs
+- Tests that both pass and fail across executions are flagged as flaky
+- Flaky tests are excluded from failure root-cause analysis
+
+### Why this approach
+- Prevents false alarms in CI
+- Keeps pipelines deterministic
+- Encourages proper test stabilization instead of masking failures
+
+This strategy scales effectively to large test suites (1000+ tests).
+
 ## Why This Reflects Senior-Level Automation
 
 * Prioritizes **maintainability**

@@ -1,7 +1,8 @@
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from collections import defaultdict
-from remediation_advisor import suggest_remediation
+from ai_utils.remediation_advisor import suggest_remediation
+from ai_utils.flaky_test_tracker import detect_flaky_tests
 import os
 
 
@@ -83,15 +84,39 @@ def is_ai_enabled():
 
 def main():
     report_path = "reports/results.xml"
+
+    # Step 1: Parse failures from JUnit report
     failures = parse_junit_report(report_path)
 
     if not failures:
         print("No test failures detected.")
         return
 
-    classified = classify_failures(failures)
+    # Step 2: Detect flaky tests (post-run, history based)
+    flaky_tests = detect_flaky_tests()
+
+    if flaky_tests:
+        print("\nFLAKY TESTS DETECTED (Excluded from analysis)")
+        print("-" * 50)
+        for test_name, history in flaky_tests.items():
+            print(f"{test_name} -> {history}")
+
+    # Step 3: Filter out flaky failures
+    stable_failures = [
+        failure for failure in failures
+        if failure["test_name"] not in flaky_tests
+    ]
+
+    if not stable_failures:
+        print("\nAll failures are from flaky tests. No stable failures to analyze.")
+        return
+
+    # Step 4: Classify only stable failures
+    classified = classify_failures(stable_failures)
+
     print_summary(classified)
 
+    # Step 5: Generate remediation suggestions
     remediation = suggest_remediation(classified)
 
     print("\nREMEDIATION SUGGESTIONS\n" + "-" * 50)
@@ -99,7 +124,6 @@ def main():
         print(f"\n{category.upper()}")
         for action in actions:
             print(f" - {action}")
-
 
 if __name__ == "__main__":
     main()
